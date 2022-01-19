@@ -1,16 +1,20 @@
 <template>
   <main>
       <input type="text" v-model="serchedElement">
+      <MovieList 
+        :movies="this.MovieList"
+      />
   </main>
 </template>
 
 <script>
 import axios from 'axios'
+import MovieList from "./MovieList.vue";
 
 export default {
-  name: "App",
+  name: "Main",
   components: {
-    // HelloWorld,
+    MovieList
   },
   data() {
       return {
@@ -27,7 +31,6 @@ export default {
       axios.get(string)
       .then((result) => {
         this.MovieList = result.data.results;
-        console.log(this.MovieList);
       })
       .catch((error) => {
         console.log(error);
@@ -39,7 +42,7 @@ export default {
     serchedElement: 
       function()
       {
-          if(this.serchedElement != '' && this.prova1 == null)
+          if(this.serchedElement != '' && this.Path == null)
           {
             if(!this.startEvent)
             {
@@ -56,17 +59,19 @@ export default {
                   {
                     newString += `${element}`; 
                   }
-                  console.log(element, index , array.length);
                 });
                 this.Path = this.OriginalPath + newString;
-                console.log(this.Path);
                 setTimeout(() => {
                   this.findMovie(this.Path); 
                 }, 200);
                 this.startEvent = false;
               }, 2500)
             }
-            
+          }
+          else
+          {
+            this.Path = null;
+            this.MovieList = null;
           }
       },
   }
