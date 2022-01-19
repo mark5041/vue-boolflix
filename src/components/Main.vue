@@ -28,39 +28,35 @@ export default {
   methods: {
     findMovie(string) 
     {
-      axios.get(string)
-      .then((result) => {
-        this.MovieList = result.data.results;
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-    }
+      if(string != null)
+      {
+        axios.get(string)
+        .then((result) => {
+          this.MovieList = result.data.results;
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+      }
+    },
+    onlySpaces(str)
+    {
+        return str.trim().length === 0;
+    },
   },
   watch: 
   {
     serchedElement: 
       function()
       {
-          if(this.serchedElement != '')
+          if(this.serchedElement != '' && this.onlySpaces(this.serchedElement) == false)
           {
             if(!this.startEvent)
             {
               this.startEvent = true;
               setTimeout(() => {
-                let string = this.serchedElement.split(" ");
-                let newString = "";
-                string.forEach((element, index, array) => {
-                  if((index == 0 && index + 1 != array.length) || index + 1 != array.length)
-                  {
-                    newString += `${element}+`; 
-                  }
-                  else
-                  {
-                    newString += `${element}`; 
-                  }
-                });
-                this.Path = this.OriginalPath + newString;
+                let string = this.serchedElement.replace(/ /g,"+");
+                this.Path = this.OriginalPath + string;
                 if(this.Path != this.OriginalPath)
                 {
                   console.log(this.Path);
@@ -76,6 +72,7 @@ export default {
           {
             this.Path = null;
             this.MovieList = null;
+            this.serchedElement = '';
           }
       },
   }
