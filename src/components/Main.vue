@@ -20,7 +20,7 @@ export default {
       return {
         serchedElement: "",
         OriginalPath: "https://api.themoviedb.org/3/search/movie?api_key=a497e9cc421ffc632cdb6b67c77a839e&query=",
-        Path: "",
+        Path: null,
         MovieList: null,
         startEvent: false,
       }
@@ -42,7 +42,7 @@ export default {
     serchedElement: 
       function()
       {
-          if(this.serchedElement != '' && this.Path == null)
+          if(this.serchedElement != '')
           {
             if(!this.startEvent)
             {
@@ -63,12 +63,13 @@ export default {
                 this.Path = this.OriginalPath + newString;
                 if(this.Path != this.OriginalPath)
                 {
+                  console.log(this.Path);
                   setTimeout(() => {
                     this.findMovie(this.Path); 
                   }, 200);
                 }
                 this.startEvent = false;
-              }, 2500)
+              }, 500)
             }
           }
           else
