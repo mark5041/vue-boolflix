@@ -51,7 +51,7 @@ export default {
                 let string = this.serchedElement.split(" ");
                 let newString = "";
                 string.forEach((element, index, array) => {
-                  if(index == 0 || index + 1 != array.length)
+                  if((index == 0 && index + 1 != array.length) || index + 1 != array.length)
                   {
                     newString += `${element}+`; 
                   }
@@ -64,6 +64,7 @@ export default {
                 setTimeout(() => {
                   this.findMovie(this.Path); 
                 }, 200);
+                console.log(this.Path);
                 this.startEvent = false;
               }, 2500)
             }
