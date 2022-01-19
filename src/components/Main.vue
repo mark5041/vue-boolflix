@@ -61,10 +61,12 @@ export default {
                   }
                 });
                 this.Path = this.OriginalPath + newString;
-                setTimeout(() => {
-                  this.findMovie(this.Path); 
-                }, 200);
-                console.log(this.Path);
+                if(this.Path != this.OriginalPath)
+                {
+                  setTimeout(() => {
+                    this.findMovie(this.Path); 
+                  }, 200);
+                }
                 this.startEvent = false;
               }, 2500)
             }
