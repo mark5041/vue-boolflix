@@ -14,6 +14,7 @@ export default {
   data() {
       return {
         serchedElement: "",
+        InitialPath: "https://api.themoviedb.org/3/movie/upcoming?api_key=a497e9cc421ffc632cdb6b67c77a839e",
         OriginalPath: "https://api.themoviedb.org/3/search/",
         typeOfEntertainment: "movie",
         API_Key: "?api_key=a497e9cc421ffc632cdb6b67c77a839e&query=",
@@ -21,6 +22,10 @@ export default {
         List: null,
         startEvent: false,
       }
+  },
+  created()
+  {
+      this.findMovie(this.InitialPath);
   },
   methods: {
     findMovie(string) 
@@ -49,6 +54,7 @@ export default {
         this.serchedElement = "";
         this.List = null;
         this.Path = null;
+        this.findMovie(this.InitialPath);
     },
     onlySpaces(str)
     {
