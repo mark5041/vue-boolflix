@@ -37,7 +37,6 @@ export default {
     getEntertinement(string)
     {
       this.typeOfEntertinement = string;
-      console.log(string);
     }
   },
   watch:

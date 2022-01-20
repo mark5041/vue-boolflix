@@ -46,7 +46,11 @@ export default {
         if(this.typeOfEntertainment != string)
         {
             this.typeOfEntertainment = string;
-            this.resetSearch();
+            console.log(string);
+            if(this.serchedElement != "")
+            {
+                this.resetSearch();
+            }
         }
     },
     resetSearch()
@@ -54,6 +58,7 @@ export default {
         this.serchedElement = "";
         this.List = null;
         this.Path = null;
+        this.typeOfEntertainment = "movie";
         this.findMovie(this.InitialPath);
     },
     onlySpaces(str)
