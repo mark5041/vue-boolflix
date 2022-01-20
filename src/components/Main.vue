@@ -2,7 +2,6 @@
   <main>
       <MovieList 
         :movies="this.list"
-        :type="this.enterteinment"
       />
   </main>
 </template>
@@ -17,7 +16,6 @@ export default {
   },
   props: {
     list: Array,
-    enterteinment: String
   },
   data() {
       return {

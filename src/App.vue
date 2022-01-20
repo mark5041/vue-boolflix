@@ -2,11 +2,9 @@
   <div id="app">
     <Header 
       @searchResult="getSearch($event)"
-      @Entertainment="getEntertinement($event)"
     />
     <Main 
       :list="this.SeriesList"
-      :enterteinment="this.typeOfEntertinement"
     />
   </div>
 </template>
@@ -34,18 +32,10 @@ export default {
     {
       this.SeriesList = array;
     },
-    getEntertinement(string)
-    {
-      this.typeOfEntertinement = string;
-    }
   },
   watch:
    {
-     SeriesList:
-      function()
-      {
-        console.log("ciao");
-      }
+
    },
 };
 </script>
