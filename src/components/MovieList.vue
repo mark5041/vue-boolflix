@@ -15,13 +15,13 @@
           </li>
       </ul>
     </div>
+    
   </div>
 </template>
 
 <script>
 import CountryFlag from 'vue-country-flag'
 import countrydb from '../assets/json_data/countries.json'
-// import axios from 'axios'
 
 export default {
   name: "Main",
@@ -33,66 +33,139 @@ export default {
   },
   data() {
       return {
-        // test: null,
-        // test2: [],
+        test: null,
+        test2: [],
         countries: countrydb,
-        // exist: false,
-        // change: 0,
+        exist: false,
+        change: 0,
       }
   },
   created() {
 
-/*
 
-    axios.get('https://api.themoviedb.org/3/configuration/languages?api_key=e99307154c6dfb0b4750f6603256716d')
-    .then((result) => {
-        this.test = result.data;
-    })
-    .catch((error) => {
-        console.log(error);
-    })
-
-    console.log("database: " + this.countries.length);
-    setTimeout(() =>{
-      this.test.forEach(element => {
-        let language = element.iso_639_1;
-        language = language.toLowerCase();
-        this.countries.forEach(element => {
-          let language2 = element.alpha_2;
-          language2 = language2.toLowerCase();
-          if(language == language2)
-          {
-            this.exist = true;
-            console.log("bella");
-          }
-        });
-        if(this.exist == false)
-        {
-          this.test2.push(language);
-        }
-        else
-        {
-          this.exist = false;
-        }
-      });
-    }, 200)
-
-*/
-    
+  
   },
   methods: {
     getFlag(lang) {
       switch (lang) {
+        case 'ik':
+        case 'gv':
+        case 'nv':
         case 'en':
           return 'us';
+        case 'ce':
+        case 'kv':
+        case 'yi':
+          return 'ru'
+        case 'pi':
+        case 'lo':
+          return 'th'
+        case 'ig':
+        case 'ha':
+        case 'yo':
+        case 'ff':
+          return 'ng';
+        case 'ur':
+        case 'ks':
+        case 'ta':
+        case 'or':
+        case 'hi':
+        case 'te':
+          return 'in';
+        case 'fy':
+          return 'de';
+        case 'eu':
+        case 'an':
+          return 'es'
+        case 'ti':
+        case 'aa':
+          return 'et'
+        case 'iu':
+        case 'oj':
+          return 'ca'
+        case 'zh':
+        case 'ii':
+          return 'cn'
         case 'ko':
           return 'kr';
         case 'ja':
           return 'jp';
-        case 'ur':
-          return 'pk';
-        case 'zh':
-          return 'cn';
+        case 'kk':
+          return 'kz';
+        case 'ka':
+        case 'ab':
+        case 'os':
+          return 'ge';
+        case 'cs':
+          return 'cz';
+        case 'av':
+          return 'az';
+        case 'rm':
+          return 'ch';
+        case 'ts':
+        case 'zu':
+        case 'xh':
+          return 'za';
+        case 'ku':
+          return 'tr';
+        case 'ln':
+          return 'cd';
+        case 'ny':
+          return 'mz';
+        case 'da':
+          return 'dk';
+        case 'hz':
+        case 'kj':
+          return 'na';
+        case 'mi':
+          return 'nz';
+        case 'uk':
+          return 'ua';
+        case 'ay':
+          return 'cl';
+        case 'ho':
+          return 'pg';
+        case 'ty':
+          return 'pf';
+        case 'nn':
+        case 'nb':
+          return 'no';
+        case 'qu':
+          return 'pe';
+        case 'sq':
+          return 'al';
+        case 'wa':
+          return 'be';
+        case 'lg':
+          return 'ug';
+        case 'el':
+          return 'gr';
+        case 'nd':
+          return 'zw';
+        case 'sw':
+          return 'tz';
+        case 'wo':
+          return 'sn';
+        case 'rn':
+          return 'bi';
+        case 'fa':
+          return 'ir';
+        case 'hy':
+          return 'am';
+        case 'dv':
+          return 'mv';
+        case 'ki':
+          return 'gl';
+        case 'jv':
+          return 'my';
+        case 'su':
+          return 'sd';
+        case 'he':
+          return 'il';
+        case 'ak':
+          return 'gh';
+        case 'oc':
+          return 'fr';
         default:
           return lang;
       }
