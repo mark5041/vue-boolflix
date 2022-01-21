@@ -44,19 +44,17 @@ export default {
       }
       else if(stringPath == null && this.multipleSearch == true)
       {
-        stringPath = this.Path = this.OriginalPath + 'tv' + this.API_Key + string;
+        stringPath = `${this.OriginalPath}tv${this.API_Key}${string}`;
         axios.get(stringPath)
         .then((result) => {
             let array1 = result.data.results;
             this.List = array1;
-            console.log("primo");
-            console.log(result.data.results);
         })
         .catch((error) => {
             console.log(error);
         })
 
-        stringPath = this.Path = this.OriginalPath + 'movie' + this.API_Key + string;
+        stringPath = `${this.OriginalPath}movie${this.API_Key}${string}`;
         axios.get(stringPath)
         .then((result) => {
             let array2 = result.data.results;
@@ -101,7 +99,6 @@ export default {
         this.serchedElement = "";
         this.List = null;
         this.Path = null;
-        this.typeOfEntertainment = "movie";
         this.findMovie(this.InitialPath, null);
     },
     onlySpaces(str)
@@ -144,11 +141,6 @@ export default {
             this.$emit('searchResult', this.List);
             this.$emit('Entertainment', this.typeOfEntertainment);
         },
-    typeOfEntertainment:
-        function()
-        {
-            console.log(this.typeOfEntertainment);
-        }
 
   }
 }
