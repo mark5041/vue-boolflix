@@ -239,6 +239,9 @@ export default {
       border-radius: 10px;
       overflow: hidden;
       cursor: unset;
+      .img-fluid{
+        height: 100%;
+      }
       .no-image {
         text-align: center;
         width: 100%;
