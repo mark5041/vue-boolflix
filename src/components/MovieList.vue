@@ -33,11 +33,7 @@ export default {
   },
   data() {
       return {
-        test: null,
-        test2: [],
         countries: countrydb,
-        exist: false,
-        change: 0,
       }
   },
   created() {

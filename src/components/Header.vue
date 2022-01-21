@@ -1,8 +1,26 @@
 <template>
   <header>
-      <input type="text" v-model="serchedElement">
-      <button @click="changeCategory('tv')">Serie TV</button>
-      <button @click="changeCategory('movie')">Film</button>
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">BOOTFLIX</a>
+        
+        <div class="navbar-collapse float-end" id="navbarSupportedContent">
+          <div class="d-flex">
+            <input type="text" v-model="serchedElement">
+            <button class="mx-4" :class="(typeOfEntertainment == 'tv') ? 'active' : ''" @click="changeCategory('tv')">Serie TV</button>
+            <button :class="(typeOfEntertainment == 'movie') ? 'active' : ''" @click="changeCategory('movie')">Film</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+      <!-- <div class="left-col">
+        <span class="title">BOOTFLIX</span>
+      </div>
+      <div class="right-col">
+        <input type="text" v-model="serchedElement">
+        <button @click="changeCategory('tv')">Serie TV</button>
+        <button @click="changeCategory('movie')">Film</button>
+      </div> -->
   </header>
 </template>
 
@@ -141,6 +159,11 @@ export default {
             this.$emit('searchResult', this.List);
             this.$emit('Entertainment', this.typeOfEntertainment);
         },
+    typeOfEntertainment:
+        function()
+        {
+          console.log(this.typeOfEntertainment);
+        }
 
   }
 }
@@ -148,4 +171,36 @@ export default {
 
 <style lang="scss">
 @import "../assets/scss/style.scss";
+header {
+  background-color: black;
+  a, button {
+    color: rgb(238, 22, 22);
+  }
+  .navbar-collapse {
+    flex-direction: row-reverse;
+    .d-flex {
+      align-content: center;
+      input {
+      padding: 0 10px;
+      margin: 0;
+      outline: 0;
+      border: none;
+      height: 30px;
+      font-size: 0.7em;
+      line-height: 0.7em;
+    }
+    button {
+      background-color: transparent;
+      border: 2px solid transparent;
+      padding: 5px 10px;
+    }
+    .active {
+      border-radius: 15px;;
+      border: 2px solid white;
+      color: white;
+    }
+    }
+    
+  }
+}
 </style>

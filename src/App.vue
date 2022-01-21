@@ -6,12 +6,14 @@
     <Main 
       :list="this.SeriesList"
     />
+    <i class="fa-brands fa-42-group"></i>
   </div>
 </template>
 
 <script>
 import Header from "./components/Header.vue";
 import Main from "./components/Main.vue";
+import '@fortawesome/fontawesome-free/js/all.js'
 
 export default {
   name: "App",
@@ -41,6 +43,7 @@ export default {
 </script>
 
 <style lang="scss">
+
 @import "~bootstrap/scss/bootstrap";
 @import "./assets/scss/style.scss";
 </style>
