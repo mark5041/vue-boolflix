@@ -4,48 +4,48 @@
   <div class="container" v-show="movies != null">
     <div class="row">
 
-      <div v-for="(element, index) in movies" :key="index" @click="element.info_visibility = true" class="card p-0">
-        <img v-show="element.poster_path != null" :src="getSeriesImage(element.poster_path)" alt="">
+      <button v-for="(element, index) in movies" :key="index" @click="getInfo(index)" class="card p-0">
+        <img class="img-fluid" v-show="element.poster_path != null" :src="getSeriesImage(element.poster_path)" alt="">
         <div v-show="element.poster_path == null" class="no-image">
           <span>Image Unavailable</span>
         </div>
+      </button>
 
-        <div v-show="element.info_visibility" class="invisble-section">
+      <div v-if="info != null" class="invisble-section">
           <div class="shadow-card">
-          <div v-show="element.name != null" class="title">
-            <h1>{{element.name}}</h1>
-            <div v-show="element.original_name != null && element.original_name != element.name" class="original_title">
-              <h3>{{element.original_name}}</h3>
-              <span>original title</span>
+            <div v-show="info.name != null" class="title">
+              <h1>{{info.name}}</h1>
+              <div v-show="info.original_name != null && info.original_name != info.name" class="original_title">
+                <h3>{{info.original_name}}</h3>
+                <span>original title</span>
+              </div>
             </div>
-          </div>
 
-          <div v-show="element.title != null" class="title">
-            <h1>{{element.title}}</h1>
-            <div v-show="element.original_title != null && element.original_title != element.title" class="original_title">
-              <h3>{{element.original_title}}</h3>
-              <span>original title</span>
+            <div v-show="info.title != null" class="title">
+              <h1>{{info.title}}</h1>
+              <div v-show="info.original_title != null && info.original_title != info.title" class="original_title">
+                <h3>{{info.original_title}}</h3>
+                <span>original title</span>
+              </div>
             </div>
-          </div>
-          
-          <div v-show="element.overview != null" class="overview">
-            <h4>Overview:</h4>
-            <span>{{element.overview}}</span>
-          </div>
-          <div class="language">
-            <span>Language: </span>
-            <span>{{element.original_language}}</span>
-            <country-flag :country='getFlag(element.original_language)' size='small'/>
-          </div>
-          <div class="language">
-            <span>Avarage Vote: {{element.vote_average}}</span>
-          </div>
-          <div @click="element.info_visibility = false" class="close">
-            <span>Close</span>
+            
+            <div v-show="info.overview != null" class="overview">
+              <h4>Overview:</h4>
+              <span>{{info.overview}}</span>
+            </div>
+            <div class="language">
+              <span>Language: </span>
+              <span>{{info.original_language}}</span>
+              <country-flag :country='getFlag(info.original_language)' size='small'/>
+            </div>
+            <div class="language">
+              <span>Avarage Vote: {{info.vote_average}}</span>
+            </div>
+            <div @click="info = null" class="close">
+              <span>Close</span>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
 
       
     </div>
@@ -68,6 +68,7 @@ export default {
   data() {
       return {
         countries: countrydb,
+        info: null,
       }
   },
   created() {
@@ -204,14 +205,14 @@ export default {
     {
       return `https://image.tmdb.org/t/p/w342${string}`;
     },
-    prova()
+    getInfo(index)
     {
-      console.log("cambia");
+      this.info = this.movies[index];
     }
   },
   watch:
   {
-    "movies.info_visibility": function(newVal, previousVal) {
+    'movies.info_visibility': function(newVal, previousVal) {
       console.log("new Value is " + newVal,
        "previous value is " + previousVal);
     }
@@ -233,13 +234,11 @@ export default {
   .card {
       flex-basis: calc(100% / 7 - 1.4em);
       position: initial;
-      max-height: 300px;
+      max-height: 250px;
       border: 5px transparent transparent;
       border-radius: 10px;
       overflow: hidden;
-      img {
-        height: 100%;
-      }
+      cursor: unset;
       .no-image {
         text-align: center;
         width: 100%;
@@ -248,7 +247,8 @@ export default {
         justify-content: center;
         align-items: center;
       }
-      .invisble-section {
+  }
+  .invisble-section {
         position: relative;
         background: linear-gradient(90deg, #e6646400 0vw, #e6646400 20vw, #181818 20vw, #181818 80vw,#e6646400 80vw, #e6646400 100vw);
         position: fixed;
@@ -263,7 +263,7 @@ export default {
           color: white;
           padding: 60px;
           left: 20%;
-          cursor: none;
+          z-index: 100000;
           .original_title {
             position: relative;
             margin-bottom: 1.5em;
@@ -290,14 +290,16 @@ export default {
           .close
           {
             position: relative;
-            top: 35%;
-            left: 45%;
+            bottom: -40%;
+            left: 45.5%;
+            border-radius: 20px;
+            border: 1px solid white;
+            width: 70px;
+            text-align: center;
           }
         }
       }
-      
-  }
-  .card, .close {
+  .close {
     cursor: pointer;
   }
   
