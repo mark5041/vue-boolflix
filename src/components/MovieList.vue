@@ -3,42 +3,34 @@
 <template>
   <div class="container" v-show="movies != null">
     <div class="row">
-      <!-- <ul v-for="(element, index) in movies" :key="index">
-          <li v-show="element.original_title != null && element.original_title != element.title">titolo originale: {{element.original_title}}</li>
-          <li v-show="element.title != null">titolo: {{element.title}}</li>
-          <li v-show="element.original_name != null && element.original_name != element.name">titolo originale: {{element.original_name}}</li>
-          <li v-show="element.name != null">titolo: {{element.name}}</li>
-          <li>lingua: {{element.original_language}}</li>
-          <li>voto: {{element.vote_average}}</li>
-          <li>
-              <country-flag :country='getFlag(element.original_language)' size='small'/>
-          </li>
-      </ul> -->
-      <div v-for="(element, index) in movies" :key="index" class="card p-0">
+
+      <div v-for="(element, index) in movies" :key="index" @click="element.info_visibility = true" class="card p-0">
         <img v-show="element.poster_path != null" :src="getSeriesImage(element.poster_path)" alt="">
         <div v-show="element.poster_path == null" class="no-image">
           <span>Image Unavailable</span>
         </div>
-        <div class="shadow-card">
+
+        <div v-show="element.info_visibility" class="invisble-section">
+          <div class="shadow-card">
           <div v-show="element.name != null" class="title">
-            <h1>titolo</h1>
+            <h1>{{element.name}}</h1>
             <div v-show="element.original_name != null && element.original_name != element.name" class="original_title">
-              <h3>titolo originale</h3>
+              <h3>{{element.original_name}}</h3>
               <span>original title</span>
             </div>
           </div>
 
           <div v-show="element.title != null" class="title">
-            <h1>titolo</h1>
+            <h1>{{element.title}}</h1>
             <div v-show="element.original_title != null && element.original_title != element.title" class="original_title">
-              <h3>titolo originale</h3>
+              <h3>{{element.original_title}}</h3>
               <span>original title</span>
             </div>
           </div>
           
-          <div class="overview">
-            <h4>overview:</h4>
-            <span>Mustafa Moradi is aching to find a girlfriend. On the other end of the city, Linnea is desperately searching for a guy with style, courage and a burning passion</span>
+          <div v-show="element.overview != null" class="overview">
+            <h4>Overview:</h4>
+            <span>{{element.overview}}</span>
           </div>
           <div class="language">
             <span>Language: </span>
@@ -48,8 +40,13 @@
           <div class="language">
             <span>Avarage Vote: {{element.vote_average}}</span>
           </div>
+          <div @click="element.info_visibility = false" class="close">
+            <span>Close</span>
+          </div>
         </div>
       </div>
+    </div>
+
       
     </div>
     
@@ -74,7 +71,9 @@ export default {
       }
   },
   created() {
-    
+    setTimeout(() => {
+      console.log(this.movies);
+    }, 200);
   },
   methods: {
     getFlag(lang) {
@@ -205,15 +204,17 @@ export default {
     {
       return `https://image.tmdb.org/t/p/w342${string}`;
     },
+    prova()
+    {
+      console.log("cambia");
+    }
   },
   watch:
   {
-    exist:
-      function()
-      {
-        this.change ++;
-        console.log(this.change);
-      }
+    "movies.info_visibility": function(newVal, previousVal) {
+      console.log("new Value is " + newVal,
+       "previous value is " + previousVal);
+    }
   }
 }
 </script>
@@ -226,11 +227,11 @@ export default {
 }
 
 .row {
-  column-gap: 1em;
+  column-gap: 1.4em;
   row-gap: 1em;
   padding: 30px 0;
   .card {
-      flex-basis: calc(100% / 6 - 1em);
+      flex-basis: calc(100% / 7 - 1.4em);
       position: initial;
       max-height: 300px;
       border: 5px transparent transparent;
@@ -247,40 +248,59 @@ export default {
         justify-content: center;
         align-items: center;
       }
-      .shadow-card{
+      .invisble-section {
+        position: relative;
+        background: linear-gradient(90deg, #e6646400 0vw, #e6646400 20vw, #181818 20vw, #181818 80vw,#e6646400 80vw, #e6646400 100vw);
+        position: fixed;
+        width: 100vw;
         height: 80vh;
-        width: 60vh;
-        position: absolute;
-        background-color: #181818;
-        color: white;
-        left: 33%;
-        padding: 15px;
-        display: none;
-        .original_title {
-          position: relative;
-          margin-bottom: 1.5em;
-          h3 {
-            margin: 0;
-            font-size: 1.4em;
+        left: 0;
+        top: 10%;
+        .shadow-card {
+          height: 80vh;
+          width: 60vw;
+          position: absolute;
+          color: white;
+          padding: 60px;
+          left: 20%;
+          cursor: none;
+          .original_title {
+            position: relative;
+            margin-bottom: 1.5em;
+            h3 {
+              margin: 0;
+              font-size: 1.4em;
+            }
+            span {
+              color: rgb(172, 172, 172);
+              position: absolute;
+              font-size: 0.8em;
+              line-height: 0.8em;
+            }
           }
-          span {
-            color: rgb(172, 172, 172);
-            position: absolute;
-            font-size: 0.8em;
-            line-height: 0.8em;
+          .language {
+            margin-top: 1em;
+            span:nth-child(1) {
+              font-size: 1.2em;
+            }
+            span:nth-child(2) {
+              margin-right: 0.6em;
+            }
           }
-        }
-        .language {
-          margin-top: 1em;
-          span:nth-child(1) {
-            font-size: 1.2em;
-          }
-          span:nth-child(2) {
-            margin-right: 0.6em;
+          .close
+          {
+            position: relative;
+            top: 35%;
+            left: 45%;
           }
         }
       }
+      
   }
+  .card, .close {
+    cursor: pointer;
+  }
+  
 
 
 }

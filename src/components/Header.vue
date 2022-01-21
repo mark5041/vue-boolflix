@@ -55,6 +55,7 @@ export default {
         axios.get(stringPath)
         .then((result) => {
             this.List = result.data.results;
+            this.newProp(this.List);
         })
         .catch((error) => {
             console.log(error);
@@ -77,12 +78,13 @@ export default {
         .then((result) => {
             let array2 = result.data.results;
             this.List = [...this.List, ...array2];
+            this.newProp(this.List);
         })
         .catch((error) => {
             console.log(error);
         })
-        
       }
+      
     },
     getSearch(string, type)
     {
@@ -110,6 +112,7 @@ export default {
         else
         {
             this.typeOfEntertainment = null;
+            this.resetSearch();
         }
     },
     resetSearch()
@@ -118,6 +121,13 @@ export default {
         this.List = null;
         this.Path = null;
         this.findMovie(this.InitialPath, null);
+    },
+    newProp(array)
+    {
+        array.forEach(element => {
+          element.info_visibility = false;
+          console.log(element.info_visibility);
+        });
     },
     onlySpaces(str)
     {
