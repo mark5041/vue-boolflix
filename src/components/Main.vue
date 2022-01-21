@@ -34,4 +34,8 @@ export default {
 
 <style lang="scss">
 @import "../assets/scss/style.scss";
+main {
+  background-color: grey;
+  min-height: calc(100vh - 55.99px);
+}
 </style>

@@ -179,26 +179,26 @@ header {
   .navbar-collapse {
     flex-direction: row-reverse;
     .d-flex {
-      align-content: center;
+      align-items: center;
       input {
-      padding: 0 10px;
-      margin: 0;
-      outline: 0;
-      border: none;
-      height: 30px;
-      font-size: 0.7em;
-      line-height: 0.7em;
-    }
-    button {
-      background-color: transparent;
-      border: 2px solid transparent;
-      padding: 5px 10px;
-    }
-    .active {
-      border-radius: 15px;;
-      border: 2px solid white;
-      color: white;
-    }
+        padding: 0 10px;
+        margin: 0;
+        outline: 0;
+        border: none;
+        height: 30px;
+        font-size: 0.7em;
+        line-height: 0.7em;
+      }
+      button {
+        background-color: transparent;
+        border: 2px solid transparent;
+        padding: 5px 10px;
+      }
+      .active {
+        border-radius: 15px;;
+        border: 2px solid white;
+        color: white;
+      }
     }
     
   }

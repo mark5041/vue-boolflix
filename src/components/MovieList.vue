@@ -1,9 +1,9 @@
 // le parti di codice che sono stati commentati serviranno per aggiustare l'assegnazione della bandiera
 
 <template>
-  <div v-show="movies != null">
-    <div>
-      <ul v-for="(element, index) in movies" :key="index">
+  <div class="container" v-show="movies != null">
+    <div class="row">
+      <!-- <ul v-for="(element, index) in movies" :key="index">
           <li v-show="element.original_title != null && element.original_title != element.title">titolo originale: {{element.original_title}}</li>
           <li v-show="element.title != null">titolo: {{element.title}}</li>
           <li v-show="element.original_name != null && element.original_name != element.name">titolo originale: {{element.original_name}}</li>
@@ -13,20 +13,27 @@
           <li>
               <country-flag :country='getFlag(element.original_language)' size='small'/>
           </li>
-      </ul>
+      </ul> -->
+      <div class="card p-0">
+        <img src="https://image.tmdb.org/t/p/w342/yZsHgObKvsS38oGBEs61zYYEFMn.jpg" alt="">
+        <div class="shadow-card">
+          
+        </div>
+      </div>
+      
     </div>
     
   </div>
 </template>
 
 <script>
-import CountryFlag from 'vue-country-flag'
+// import CountryFlag from 'vue-country-flag'
 import countrydb from '../assets/json_data/countries.json'
 
 export default {
   name: "Main",
   components: {
-    CountryFlag,
+    // CountryFlag,
   },
   props: {
     movies: Array,
@@ -181,4 +188,26 @@ export default {
 
 <style lang="scss">
 @import "../assets/scss/style.scss";
+
+.container {
+  height: 100%;
+}
+
+.row {
+  column-gap: 1em;
+  row-gap: 1em;
+  padding: 30px 0;
+  .card {
+      flex-basis: calc(100% / 5 - 1em);
+      max-height: 300px;
+      border: 5px transparent transparent;
+      border-radius: 10px;
+      overflow: hidden;
+      img {
+        height: 100%;
+      }
+  }
+
+
+}
 </style>
