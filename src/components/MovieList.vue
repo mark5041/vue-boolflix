@@ -14,10 +14,40 @@
               <country-flag :country='getFlag(element.original_language)' size='small'/>
           </li>
       </ul> -->
-      <div class="card p-0">
-        <img src="https://image.tmdb.org/t/p/w342/yZsHgObKvsS38oGBEs61zYYEFMn.jpg" alt="">
+      <div v-for="(element, index) in movies" :key="index" class="card p-0">
+        <img v-show="element.poster_path != null" :src="getSeriesImage(element.poster_path)" alt="">
+        <div v-show="element.poster_path == null" class="no-image">
+          <span>Image Unavailable</span>
+        </div>
         <div class="shadow-card">
+          <div v-show="element.name != null" class="title">
+            <h1>titolo</h1>
+            <div v-show="element.original_name != null && element.original_name != element.name" class="original_title">
+              <h3>titolo originale</h3>
+              <span>original title</span>
+            </div>
+          </div>
+
+          <div v-show="element.title != null" class="title">
+            <h1>titolo</h1>
+            <div v-show="element.original_title != null && element.original_title != element.title" class="original_title">
+              <h3>titolo originale</h3>
+              <span>original title</span>
+            </div>
+          </div>
           
+          <div class="overview">
+            <h4>overview:</h4>
+            <span>Mustafa Moradi is aching to find a girlfriend. On the other end of the city, Linnea is desperately searching for a guy with style, courage and a burning passion</span>
+          </div>
+          <div class="language">
+            <span>Language: </span>
+            <span>{{element.original_language}}</span>
+            <country-flag :country='getFlag(element.original_language)' size='small'/>
+          </div>
+          <div class="language">
+            <span>Avarage Vote: {{element.vote_average}}</span>
+          </div>
         </div>
       </div>
       
@@ -44,9 +74,7 @@ export default {
       }
   },
   created() {
-
-
-  
+    
   },
   methods: {
     getFlag(lang) {
@@ -173,6 +201,10 @@ export default {
           return lang;
       }
     },
+    getSeriesImage(string)
+    {
+      return `https://image.tmdb.org/t/p/w342${string}`;
+    },
   },
   watch:
   {
@@ -198,13 +230,55 @@ export default {
   row-gap: 1em;
   padding: 30px 0;
   .card {
-      flex-basis: calc(100% / 5 - 1em);
+      flex-basis: calc(100% / 6 - 1em);
+      position: initial;
       max-height: 300px;
       border: 5px transparent transparent;
       border-radius: 10px;
       overflow: hidden;
       img {
         height: 100%;
+      }
+      .no-image {
+        text-align: center;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .shadow-card{
+        height: 80vh;
+        width: 60vh;
+        position: absolute;
+        background-color: #181818;
+        color: white;
+        left: 33%;
+        padding: 15px;
+        display: none;
+        .original_title {
+          position: relative;
+          margin-bottom: 1.5em;
+          h3 {
+            margin: 0;
+            font-size: 1.4em;
+          }
+          span {
+            color: rgb(172, 172, 172);
+            position: absolute;
+            font-size: 0.8em;
+            line-height: 0.8em;
+          }
+        }
+        .language {
+          margin-top: 1em;
+          span:nth-child(1) {
+            font-size: 1.2em;
+          }
+          span:nth-child(2) {
+            margin-right: 0.6em;
+          }
+        }
       }
   }
 
