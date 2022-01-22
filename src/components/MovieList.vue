@@ -1,15 +1,18 @@
 // le parti di codice che sono stati commentati serviranno per aggiustare l'assegnazione della bandiera
 
 <template>
+
   <div class="container" v-show="movies != null">
     <div class="row">
+
 
       <button v-for="(element, index) in movies" :key="index" @click="getInfo(index)" class="card p-0">
         <img class="img-fluid" v-show="element.poster_path != null" :src="getSeriesImage(element.poster_path)" alt="">
         <img class="img-fluid no-image" v-show="element.poster_path == null" src="../assets/img/no-image.jpg" alt="">
       </button>
 
-      <div v-if="info != null" class="invisble-section">
+      <transition v-on:before-enter="SCbeforeEnter" v-on:enter="SCenter" v-on:leave="SCleave" v-bind:css="false">
+        <div v-if="info != null" class="invisble-section">
           <div class="shadow-card">
             <div v-show="info.name != null" class="title">
               <h1>{{info.name}}</h1>
@@ -29,13 +32,22 @@
             
             <div v-show="info.overview != ''" class="overview">
               <h4>Overview:</h4>
-              <span>{{info.overview}}   {{info.overview.length}}</span>
+              <span>{{overviewText}}</span>
+              <div v-if="moreText == false" @click="moreText = true" href="#" class="ms-2 text-primary d-inline">...more</div>
+              <div v-else-if="moreText == true" @click="moreText = false" href="#" class="ms-2 text-primary d-inline">mostra meno</div>
             </div>
-            <div class="language">
+
+            <div v-show="info.overview != ''" class="overview">
+              <h4>Overview:</h4>
+              <span>Alberto Angela, Alberto Angela, Alberto Angela, Alberto Angela, Alberto Angela</span>
+            </div>
+
+            <div class="language my-3">
               <span>Language: </span>
               <span>{{getLangName(info.original_language)}}</span>
               <country-flag :country='getFlag(info.original_language)' size='small'/>
             </div>
+
             <div class="language">
               <span>Avarage Vote: {{getRouded(info.vote_average)}}</span>
             </div>
@@ -44,7 +56,7 @@
             </div>
           </div>
         </div>
-
+      </transition>
       
     </div>
     
@@ -55,6 +67,7 @@
 // import CountryFlag from 'vue-country-flag'
 import countrydb from '../assets/json_data/countries.json'
 import axios from 'axios'
+import Velocity from 'velocity-animate'
 
 export default {
   name: "Main",
@@ -69,19 +82,46 @@ export default {
         countries: countrydb,
         info: null,
         language: null,
+        moreText: false,
+        moreCast: false,
+        overviewText: null,
+        overviewCast: null,
       }
   },
   created() {
     axios.get("https://api.themoviedb.org/3/configuration/languages?api_key=e99307154c6dfb0b4750f6603256716d")
     .then((result) => {
         this.language = result.data;
-        console.log(this.language[100].english_name);
     })
     .catch((error) => {
         console.log(error);
-    })
+    });
+
   },
   methods: {
+
+
+    SCbeforeEnter: 
+        function (el) 
+        {
+            el.style.opacity = 0
+            el.style.top = '60%'
+        },
+    SCenter: 
+        function (el, done) 
+        {
+            Velocity(el, { opacity: 1, top: '10%' }, { duration: 300 }, { complete: done })
+        },
+    SCleave: 
+        function (el, done) 
+        {
+            Velocity(el, { top: '5%', opacity: 1}, { duration: 200 })
+            Velocity(el, { top: '70%', opacity: 0}, { duration: 500 })
+            Velocity(el, { display: 'none' }, { complete: done })
+        },
+
+
+
     getFlag(lang) {
       switch (lang) {
         case 'ik':
@@ -212,7 +252,27 @@ export default {
     },
     getInfo(index)
     {
-      this.info = this.movies[index];
+      if(this.movies[index].name == null)
+      {
+        axios.get(`https://api.themoviedb.org/3/movie/${this.movies[index].id}?api_key=a497e9cc421ffc632cdb6b67c77a839e`)
+        .then((result) => {
+            this.info = result.data;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+      }
+      else
+      {
+        axios.get(`https://api.themoviedb.org/3/tv/${this.movies[index].id}?api_key=a497e9cc421ffc632cdb6b67c77a839e`)
+        .then((result) => {
+            this.info = result.data;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+      }
+      
     },
     getRouded(float)
     {
@@ -232,11 +292,54 @@ export default {
           }
           i++;
         } 
-    }
+    },
   },
   watch:
   {
-    
+    info:
+      function()
+      {
+        if(this.info != null)
+        {
+          if(this.info.overview.length >= 200)
+          {
+            let text = this.info.overview.match(/.{1,200}(\s|$)/g);
+            this.overviewText = text[0];
+            this.moreText = false;
+          }
+          else
+          {
+            this.overviewText = this.info.overview;
+            this.moreText = null;
+          }
+        }
+        else
+        {
+          this.moreText = null;
+          this.moreCast = null;
+        }
+      },
+    moreText: 
+      function()
+      {
+        if(this.moreText != null)
+        {
+          if(this.moreText && this.info.overview.length >= 200)
+          {
+            this.overviewText = this.info.overview;
+          }
+          else  if(!this.moreText && this.info.overview.length >= 200)
+                {
+                  let text = this.info.overview.match(/.{1,200}(\s|$)/g);
+                  this.overviewText = text[0];
+                  this.moreText = false;
+                }
+                else
+                {
+                  this.overviewText = this.info.overview;
+                }
+        }
+      }
   }
 }
 </script>
@@ -277,11 +380,12 @@ export default {
         left: 0;
         top: 10%;
         .shadow-card {
+          font-size: 90%;
           height: 80vh;
           width: 60vw;
           position: relative;
           color: white;
-          padding: 60px;
+          padding: 50px;
           left: calc(20vw - 12px);
           z-index: 100000;
           .original_title {
@@ -298,8 +402,10 @@ export default {
               line-height: 0.8em;
             }
           }
+          .overview {
+            margin-bottom: 1em;
+          }
           .language {
-            margin-top: 1em;
             span:nth-child(1) {
               font-size: 1.2em;
             }
@@ -322,6 +428,10 @@ export default {
       }
   .close {
     cursor: pointer;
+  }
+
+  a {
+    text-decoration: none;
   }
   
  
