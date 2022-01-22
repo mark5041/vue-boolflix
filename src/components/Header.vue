@@ -1,5 +1,6 @@
 <template>
   <header>
+    <div class="container">
     <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">BOOTFLIX</a>
@@ -13,14 +14,7 @@
         </div>
       </div>
     </nav>
-      <!-- <div class="left-col">
-        <span class="title">BOOTFLIX</span>
-      </div>
-      <div class="right-col">
-        <input type="text" v-model="serchedElement">
-        <button @click="changeCategory('tv')">Serie TV</button>
-        <button @click="changeCategory('movie')">Film</button>
-      </div> -->
+    </div>
   </header>
 </template>
 
@@ -201,12 +195,12 @@ header {
       }
       button {
         background-color: transparent;
-        border: 2px solid transparent;
+        border: 1px solid transparent;
         padding: 5px 10px;
       }
       .active {
         border-radius: 15px;;
-        border: 2px solid white;
+        border: 1px solid white;
         color: white;
       }
     }

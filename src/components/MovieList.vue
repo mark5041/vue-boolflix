@@ -6,9 +6,7 @@
 
       <button v-for="(element, index) in movies" :key="index" @click="getInfo(index)" class="card p-0">
         <img class="img-fluid" v-show="element.poster_path != null" :src="getSeriesImage(element.poster_path)" alt="">
-        <div v-show="element.poster_path == null" class="no-image">
-          <span>Image Unavailable</span>
-        </div>
+        <img class="img-fluid no-image" v-show="element.poster_path == null" src="../assets/img/no-image.jpg" alt="">
       </button>
 
       <div v-if="info != null" class="invisble-section">
@@ -29,17 +27,17 @@
               </div>
             </div>
             
-            <div v-show="info.overview != null" class="overview">
+            <div v-show="info.overview != ''" class="overview">
               <h4>Overview:</h4>
-              <span>{{info.overview}}</span>
+              <span>{{info.overview}}   {{info.overview.length}}</span>
             </div>
             <div class="language">
               <span>Language: </span>
-              <span>{{info.original_language}}</span>
+              <span>{{getLangName(info.original_language)}}</span>
               <country-flag :country='getFlag(info.original_language)' size='small'/>
             </div>
             <div class="language">
-              <span>Avarage Vote: {{info.vote_average}}</span>
+              <span>Avarage Vote: {{getRouded(info.vote_average)}}</span>
             </div>
             <div @click="info = null" class="close">
               <span>Close</span>
@@ -56,6 +54,7 @@
 <script>
 // import CountryFlag from 'vue-country-flag'
 import countrydb from '../assets/json_data/countries.json'
+import axios from 'axios'
 
 export default {
   name: "Main",
@@ -69,12 +68,18 @@ export default {
       return {
         countries: countrydb,
         info: null,
+        language: null,
       }
   },
   created() {
-    setTimeout(() => {
-      console.log(this.movies);
-    }, 200);
+    axios.get("https://api.themoviedb.org/3/configuration/languages?api_key=e99307154c6dfb0b4750f6603256716d")
+    .then((result) => {
+        this.language = result.data;
+        console.log(this.language[100].english_name);
+    })
+    .catch((error) => {
+        console.log(error);
+    })
   },
   methods: {
     getFlag(lang) {
@@ -208,14 +213,30 @@ export default {
     getInfo(index)
     {
       this.info = this.movies[index];
+    },
+    getRouded(float)
+    {
+      return Math.round(parseFloat(float));
+    },
+    getLangName(string)
+    {
+        let langArray = this.language;
+        let find = false;
+        let i = 0;
+        while(find == false)
+        {
+          if(langArray[i].iso_639_1 == string)
+          {
+            find = true;
+            return langArray[i].english_name;
+          }
+          i++;
+        } 
     }
   },
   watch:
   {
-    'movies.info_visibility': function(newVal, previousVal) {
-      console.log("new Value is " + newVal,
-       "previous value is " + previousVal);
-    }
+    
   }
 }
 </script>
@@ -233,22 +254,18 @@ export default {
   padding: 30px 0;
   .card {
       flex-basis: calc(100% / 7 - 1.4em);
+      align-self: stretch;
       position: initial;
       max-height: 250px;
       border: 5px transparent transparent;
       border-radius: 10px;
       overflow: hidden;
       cursor: unset;
-      .img-fluid{
+      .img-fluid:nth-child(1){
         height: 100%;
       }
       .no-image {
-        text-align: center;
         width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
       }
   }
   .invisble-section {
@@ -262,10 +279,10 @@ export default {
         .shadow-card {
           height: 80vh;
           width: 60vw;
-          position: absolute;
+          position: relative;
           color: white;
           padding: 60px;
-          left: 20%;
+          left: calc(20vw - 12px);
           z-index: 100000;
           .original_title {
             position: relative;
@@ -292,9 +309,10 @@ export default {
           }
           .close
           {
-            position: relative;
-            bottom: -40%;
+            position: absolute;
+            bottom: 10%;
             left: 45.5%;
+            transform: translatey(-50%);
             border-radius: 20px;
             border: 1px solid white;
             width: 70px;
@@ -306,6 +324,7 @@ export default {
     cursor: pointer;
   }
   
+ 
 
 
 }
