@@ -3,7 +3,7 @@
     <div class="container">
     <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">BOOTFLIX</a>
+        <img class="logo" src="../assets/img/logo.png" alt="">
         
         <div class="navbar-collapse float-end" id="navbarSupportedContent">
           <div class="d-flex">
@@ -177,7 +177,13 @@ export default {
 @import "../assets/scss/style.scss";
 header {
   background-color: black;
-  a, button {
+  nav {
+    height: 100%;
+  }
+  .logo {
+    max-height: 40px;
+  }
+  button {
     color: rgb(238, 22, 22);
   }
   .navbar-collapse {

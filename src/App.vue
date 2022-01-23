@@ -6,6 +6,7 @@
     <Main 
       :list="this.SeriesList"
     />
+    
   </div>
 </template>
 

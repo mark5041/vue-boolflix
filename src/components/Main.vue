@@ -36,6 +36,6 @@ export default {
 @import "../assets/scss/style.scss";
 main {
   background-color: grey;
-  min-height: calc(100vh - 55.99px);
+  min-height: calc(100vh - 60px);
 }
 </style>

@@ -2,7 +2,7 @@
 
 <template>
 
-  <div class="container" v-show="movies != null">
+  <div class="container"  v-show="movies != null">
     <div class="row">
 
 
@@ -15,7 +15,7 @@
         <div v-if="info != null" class="invisble-section">
           <div class="shadow-card">
             <div v-show="info.name != null" class="title">
-              <h1>{{info.name}}</h1>
+              <h2>{{info.name}}</h2>
               <div v-show="info.original_name != null && info.original_name != info.name" class="original_title">
                 <h3>{{info.original_name}}</h3>
                 <span>original title</span>
@@ -23,7 +23,7 @@
             </div>
 
             <div v-show="info.title != null" class="title">
-              <h1>{{info.title}}</h1>
+              <h2>{{info.title}}</h2>
               <div v-show="info.original_title != null && info.original_title != info.title" class="original_title">
                 <h3>{{info.original_title}}</h3>
                 <span>original title</span>
@@ -34,12 +34,14 @@
               <h4>Overview:</h4>
               <span>{{overviewText}}</span>
               <div v-if="moreText == false" @click="moreText = true" href="#" class="ms-2 text-primary d-inline">...more</div>
-              <div v-else-if="moreText == true" @click="moreText = false" href="#" class="ms-2 text-primary d-inline">mostra meno</div>
+              <div v-else-if="moreText == true" @click="moreText = false" href="#" class="ms-2 text-primary d-inline">less</div>
             </div>
 
-            <div v-show="info.overview != ''" class="overview">
-              <h4>Overview:</h4>
-              <span>Alberto Angela, Alberto Angela, Alberto Angela, Alberto Angela, Alberto Angela</span>
+            <div v-show="showedCast != ''" class="overview">
+              <h4>Cast:</h4>
+              <span>{{showedCast}}</span>
+              <div v-if="moreCast == false" @click="moreCast = true" href="#" class="ms-2 text-primary d-inline">...more</div>
+              <div v-else-if="moreCast == true" @click="moreCast = false" href="#" class="ms-2 text-primary d-inline">less</div>
             </div>
 
             <div class="language my-3">
@@ -48,12 +50,17 @@
               <country-flag :country='getFlag(info.original_language)' size='small'/>
             </div>
 
-            <div class="language">
+            <div class="vote">
               <span>Avarage Vote: {{getRouded(info.vote_average)}}</span>
             </div>
+
             <div @click="info = null" class="close">
-              <span>Close</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#fff" class="bi bi-x-lg" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
+                <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
+              </svg>
             </div>
+
           </div>
         </div>
       </transition>
@@ -80,12 +87,14 @@ export default {
   data() {
       return {
         countries: countrydb,
+        scrollBar: false,
         info: null,
         language: null,
         moreText: false,
         moreCast: false,
         overviewText: null,
-        overviewCast: null,
+        showedCast: null,
+        fullCast: null,
       }
   },
   created() {
@@ -257,21 +266,26 @@ export default {
         axios.get(`https://api.themoviedb.org/3/movie/${this.movies[index].id}?api_key=a497e9cc421ffc632cdb6b67c77a839e`)
         .then((result) => {
             this.info = result.data;
+            this.getCast();
         })
         .catch((error) => {
             console.log(error);
         });
+
+        
       }
       else
       {
         axios.get(`https://api.themoviedb.org/3/tv/${this.movies[index].id}?api_key=a497e9cc421ffc632cdb6b67c77a839e`)
         .then((result) => {
             this.info = result.data;
+            this.getCast();
         })
         .catch((error) => {
             console.log(error);
         });
       }
+      
       
     },
     getRouded(float)
@@ -293,30 +307,62 @@ export default {
           i++;
         } 
     },
+    getCast()
+    {
+      if(this.info.name == null)
+      {
+        axios.get(`https://api.themoviedb.org/3/movie/${this.info.id}/credits?api_key=a497e9cc421ffc632cdb6b67c77a839e`)
+        .then((result) => {
+            let newArray = result.data.cast;
+            this.fullCast = newArray.map(e => e.original_name);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+      }
+      else
+      {
+        axios.get(`https://api.themoviedb.org/3/tv/${this.info.id}/credits?api_key=a497e9cc421ffc632cdb6b67c77a839e`)
+        .then((result) => {
+            let newArray = result.data.cast;
+            this.fullCast = newArray.map(e => e.original_name);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+      }
+      
+      
+    }
+    
   },
   watch:
   {
+    
     info:
       function()
       {
         if(this.info != null)
         {
           if(this.info.overview.length >= 200)
-          {
-            let text = this.info.overview.match(/.{1,200}(\s|$)/g);
-            this.overviewText = text[0];
-            this.moreText = false;
-          }
-          else
-          {
-            this.overviewText = this.info.overview;
-            this.moreText = null;
-          }
+            {
+              let text = this.info.overview.match(/.{1,200}(\s|$)/g);
+              this.overviewText = text[0];
+              this.moreText = false;
+            }
+            else
+            {
+              this.overviewText = this.info.overview;
+              this.moreText = null;
+            }
+
         }
         else
         {
           this.moreText = null;
           this.moreCast = null;
+          this.showedCast = null;
+          this.fullCast = null;
         }
       },
     moreText: 
@@ -337,6 +383,55 @@ export default {
                 else
                 {
                   this.overviewText = this.info.overview;
+                }
+        }
+      },
+    fullCast:
+      function()
+      {
+        if(this.fullCast != null)
+        {
+          if(this.fullCast.length > 4)
+            {
+              this.showedCast = this.fullCast.filter((element, index) => { 
+                                    if(index < 5)
+                                    {
+                                      return element;
+                                    }
+                                });
+              this.showedCast = this.showedCast.join(", ");
+              this.moreCast = false;
+            }
+            else
+            {
+              this.showedCast = this.fullCast.join(", ");
+              this.moreCast = null;
+            }
+        }
+      },
+    moreCast: 
+      function()
+      {
+        if(this.moreCast != null)
+        {
+          if(this.moreCast && this.fullCast.length > 4)
+          {
+            this.showedCast = this.fullCast.join(", ");
+          }
+          else  if(!this.moreCast && this.fullCast.length > 4)
+                {
+                  this.showedCast = this.fullCast.filter((element, index) => { 
+                                        if(index < 5)
+                                        {
+                                          return element;
+                                        }
+                                    });
+                  this.showedCast = this.showedCast.join(", ");
+                  this.moreCast = false;
+                }
+                else
+                {
+                  this.showedCast = this.fullCast.join(", ");
                 }
         }
       }
@@ -373,20 +468,26 @@ export default {
   }
   .invisble-section {
         position: relative;
-        background: linear-gradient(90deg, #e6646400 0vw, #e6646400 20vw, #181818 20vw, #181818 80vw,#e6646400 80vw, #e6646400 100vw);
         position: fixed;
         width: 100vw;
         height: 80vh;
         left: 0;
-        top: 10%;
+        z-index: 9999;
+        .close-div{
+          height: 100%;
+          width: 20vw;
+        }
         .shadow-card {
-          font-size: 90%;
+          position: relative;
           height: 80vh;
           width: 60vw;
-          position: relative;
-          color: white;
-          padding: 50px;
+          font-size: 90%;
           left: calc(20vw - 12px);
+          padding: 60px;
+          background-color: #181818;
+          color: white;
+          border-radius: 15px;
+          overflow: overlay;
           z-index: 100000;
           .original_title {
             position: relative;
@@ -413,16 +514,15 @@ export default {
               margin-right: 0.6em;
             }
           }
+          .vote{
+            margin-bottom: 5em;;
+            font-size: 1.2em;
+          }
           .close
           {
             position: absolute;
-            bottom: 10%;
-            left: 45.5%;
-            transform: translatey(-50%);
-            border-radius: 20px;
-            border: 1px solid white;
-            width: 70px;
-            text-align: center;
+            top: 3.5%;
+            right: 3%;
           }
         }
       }
