@@ -3,8 +3,9 @@
     <div class="container">
     <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
-        <img class="logo" src="../assets/img/logo.png" alt="">
-        
+        <a @click="window.location.reload()" href="">
+          <img class="logo" src="../assets/img/logo.png" alt="">
+        </a>
         <div class="navbar-collapse float-end" id="navbarSupportedContent">
           <div class="d-flex">
             <input type="text" v-model="serchedElement">
